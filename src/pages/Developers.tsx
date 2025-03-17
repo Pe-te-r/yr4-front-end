@@ -26,6 +26,12 @@ const developers: Developer[] = [
       "I worked on integrating third-party services, such as payment gateways and SMS notifications, into the SHA platform. One of the challenges was ensuring compatibility across different devices and browsers. I also contributed to the chatbot's natural language processing (NLP) capabilities, making it more user-friendly and efficient.",
     image: "https://i.pinimg.com/236x/78/86/f9/7886f9c50b3ddd5b73ee8fbbed4e9888.jpg", // Replace with actual image URL
   },
+  {
+    name: "Phantom Green",
+    message:
+      "My focus was on ensuring the security of the SHA website and chatbot. I implemented encryption protocols and conducted regular vulnerability assessments to protect user data. One of the challenges was balancing security with performance, which we achieved through careful optimization. It was a fulfilling experience to contribute to such an impactful project.",
+    image: "https://i.pinimg.com/236x/ce/cb/b0/cecbb00cd1db6b0eb798cefd134c53a0.jpg", // Replace with actual image URL
+  },
 ];
 
 const DevelopersPage = () => {

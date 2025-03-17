@@ -5,6 +5,7 @@ import LoginPage from "./pages/LoginPage";
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import DevelopersPage from "./pages/Developers";
+import ChatbotPage from "./pages/ChatBot";
 
 const App: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ const App: React.FC = () => {
         <Route path="/" element={<Home />} />
         
         <Route path="/developers" element={<DevelopersPage />} />
+        <Route path="/bot" element={<ChatbotPage />} />
       </Routes>
     </Router>
   );
