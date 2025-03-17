@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom"; // Corrected import
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,19 +14,37 @@ const Navbar = () => {
         <div className="flex justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
-            <Link to='/'>
-            <img
-              src="https://sha.go.ke/images/sha_logo.svg"
-              alt="SHA Logo"
-              className="h-10"
+            <Link to="/">
+              <img
+                src="https://sha.go.ke/images/sha_logo.svg"
+                alt="SHA Logo"
+                className="h-10"
               />
-              </Link>
+            </Link>
           </div>
 
           {/* Desktop Menu */}
+          <div className="hidden md:flex items-center space-x-4 flex-grow justify-center">
+            {/* About Developers Link (Centered) */}
+            <Link
+              to="/developers"
+              className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+            >
+              About Developers
+            </Link>
+             <Link
+              to="/bot"
+              className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+            >
+             Chat Bot
+            </Link>
+            
+          </div>
+
+          {/* Register and Login Links (Right Side) */}
           <div className="hidden md:flex items-center space-x-4">
-            <Link to='/register'
-              
+            <Link
+              to="/register"
               className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
             >
               Register
@@ -92,18 +110,31 @@ const Navbar = () => {
           </button>
         </div>
         <div className="px-4 pt-2 pb-3 space-y-1">
-          <a
-            href="#"
+          <Link
+            to="/developers"
+            className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
+          >
+            About Developers
+          </Link>
+          <Link
+            to="/bot"
+            className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
+          >
+            Chat Bot
+          </Link>
+
+          <Link
+            to="/register"
             className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
           >
             Register
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="/login"
             className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
           >
             Login
-          </a>
+          </Link>
         </div>
       </div>
     </nav>

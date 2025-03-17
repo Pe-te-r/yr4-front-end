@@ -4,6 +4,7 @@ import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
+import DevelopersPage from "./pages/Developers";
 
 const App: React.FC = () => {
   return (
@@ -18,6 +19,8 @@ const App: React.FC = () => {
 
         {/* Default Route (Redirect to Login) */}
         <Route path="/" element={<Home />} />
+        
+        <Route path="/developers" element={<DevelopersPage />} />
       </Routes>
     </Router>
   );
