@@ -1,4 +1,11 @@
 // types.ts
+export interface LoginData {
+  email: string;
+  id_number: string;
+  otp: string;
+}
+
+
 export interface UserRegistrationData {
   firstname: string;
   id_number: string;

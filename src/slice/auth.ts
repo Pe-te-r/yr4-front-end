@@ -1,12 +1,14 @@
 // features/apiSlice.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { ApiResponse, UserRegistrationData } from "../types/authType";
-import {BASE_URL} from './url'
+import { ApiResponse, UserRegistrationData,LoginData } from "../types/authType";
+import { BASE_URL } from "./url";
 
+// Define types for login data
 export const apiSlice = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL}),
+  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
   endpoints: (builder) => ({
+    // Register User Mutation
     registerUser: builder.mutation<ApiResponse, UserRegistrationData>({
       query: (userData) => ({
         url: "/register",
@@ -14,7 +16,17 @@ export const apiSlice = createApi({
         body: userData,
       }),
     }),
+
+    // Login Mutation
+    loginUser: builder.mutation<ApiResponse, LoginData>({
+      query: (loginData) => ({
+        url: "/login",
+        method: "POST",
+        body: loginData,
+      }),
+    }),
   }),
 });
 
-export const { useRegisterUserMutation } = apiSlice;
+// Export hooks for usage in components
+export const { useRegisterUserMutation, useLoginUserMutation } = apiSlice;
