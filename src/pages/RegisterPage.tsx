@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useRegisterUserMutation } from "../slice/auth";
+// import { data } from "react-router-dom";
+import { UserRegistrationData } from "../types/authType";
 
 // Define types for form data
 interface FormData {
-  idType: string;
+  // idType: string;
+  idType: "Kenyan Citizen" | "Refugee" | "Foreign Citizen" | "Mandate" | "";
   idNumber: string;
   firstName: string;
   phoneNumber: string;
@@ -21,7 +25,8 @@ interface FormErrors {
 const RegisterPage: React.FC = () => {
   // State for form data
   const [formData, setFormData] = useState<FormData>({
-    idType: "",
+    // idType: "",
+  idType: "",
     idNumber: "",
     firstName: "",
     phoneNumber: "",
@@ -50,6 +55,16 @@ const RegisterPage: React.FC = () => {
       [name]: "",
     });
   };
+
+  // Register user mutation
+  const [sendData, { isLoading,error, data, isError, isSuccess }] = useRegisterUserMutation();
+
+  useEffect(() => {
+    if (!isLoading) {
+      console.log(data);
+    }
+    console.log(error)
+  }, [isSuccess, isError]);
 
   // Validate form
   const validateForm = (): boolean => {
@@ -87,7 +102,15 @@ const RegisterPage: React.FC = () => {
     e.preventDefault();
     if (validateForm()) {
       console.log("Form Data:", formData);
-      alert("Form submitted successfully!");
+      const userRegistrationData:UserRegistrationData = {
+        idType: formData.idType,
+        id_number: formData.idNumber,
+        firstname: formData.firstName,
+        contact: formData.phoneNumber,
+        email: formData.email
+      };
+      sendData(userRegistrationData)
+      // alert("Form submitted successfully!");
     } else {
       console.log("Form has errors. Please fix them.");
     }
