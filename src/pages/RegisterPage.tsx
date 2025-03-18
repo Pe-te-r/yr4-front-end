@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useRegisterUserMutation } from "../slice/auth";
 // import { data } from "react-router-dom";
-import { UserRegistrationData } from "../types/authType";
+import { ErrorType, UserRegistrationData } from "../types/authType";
+import { toast } from "react-toastify";
 
 // Define types for form data
 interface FormData {
@@ -60,10 +61,14 @@ const RegisterPage: React.FC = () => {
   const [sendData, { isLoading,error, data, isError, isSuccess }] = useRegisterUserMutation();
 
   useEffect(() => {
-    if (!isLoading) {
-      console.log(data);
+    if(isSuccess){
+      toast(data.message)
     }
-    console.log(error)
+    if(isError){
+      const err=error as ErrorType
+      toast.error(err.data.message)
+    }
+
   }, [isSuccess, isError]);
 
   // Validate form

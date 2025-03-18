@@ -12,3 +12,12 @@ export interface ApiResponse {
   message: string;
   data?: UserRegistrationData;
 }
+
+export interface ErrorType{
+  status:string
+  data:{
+    message:string
+    error?:string
+
+  }
+}
