@@ -3,6 +3,7 @@ import { useRegisterUserMutation } from "../slice/auth";
 // import { data } from "react-router-dom";
 import { ErrorType, UserRegistrationData } from "../types/authType";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 // Define types for form data
 interface FormData {
@@ -59,13 +60,16 @@ const RegisterPage: React.FC = () => {
 
   // Register user mutation
   const [sendData, { isLoading,error, data, isError, isSuccess }] = useRegisterUserMutation();
+  const navigate=useNavigate()
 
   useEffect(() => {
     if(isSuccess){
       toast(data.message)
+      navigate('/login')
     }
     if(isError){
       const err=error as ErrorType
+      // console.log(err)
       toast.error(err.data.message)
     }
 
@@ -243,12 +247,17 @@ const RegisterPage: React.FC = () => {
           </div>
 
           {/* Proceed Button */}
+          {
+            isLoading ?
+            'loading...'
+            :
           <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             Proceed
           </button>
+          }
         </form>
 
         {/* Already have an account? */}
