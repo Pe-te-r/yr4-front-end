@@ -1,8 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { useGetCodeByEmailMutation } from "../slice/code";
 import  { toast} from "react-toastify";
 import { ErrorResponse, useNavigate } from "react-router-dom";
 import { useLoginUserMutation } from "../slice/auth";
+import { useUserStorage } from "../hooks/localStorage";
 
 // Define types for form data
 interface LoginFormData {
@@ -44,7 +45,7 @@ const LoginPage: React.FC = () => {
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   // RTK Query mutation for sending email
-  const [sendMail, { isLoading: MailLoading, isSuccess: MailSuccess, error: MailError }] =
+  const [sendMail, { isLoading: MailLoading}] =
     useGetCodeByEmailMutation();
 
   // Handle input change for email and ID number
@@ -133,6 +134,7 @@ const LoginPage: React.FC = () => {
       const response = await sendMail({ email: formData.email }).unwrap();
       toast.success(response.message);
     } catch (err) {
+      console.log(err)
       toast.error("Failed to send OTP. Please try again.");
     }
 
@@ -178,6 +180,7 @@ const LoginPage: React.FC = () => {
   };
   const [loginUser, { isLoading }] = useLoginUserMutation();
   const navigate=useNavigate()
+  const {saveUser} =useUserStorage()
   // Handle form submission
   const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -194,9 +197,13 @@ const LoginPage: React.FC = () => {
           email:formData.email
         }
       const response = await loginUser(data).unwrap();
-      console.log("Login successful:", response);
+      console.log("Login successful:", response.data?.token);
       toast.success("Login successful!");
       navigate('/bot')
+      if(response.data){
+        saveUser(response.data?.token,response.data?.id,response.data?.role)
+      }
+
       }
       
     } catch (err) {

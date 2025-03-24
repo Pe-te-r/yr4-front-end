@@ -14,10 +14,16 @@ export interface UserRegistrationData {
   idType: "Kenyan Citizen" | "Refugee" | "Foreign Citizen" | "Mandate" | "";
 }
 
+interface LoginDataRes{
+  token:string,
+  id:string,
+  role:string
+}
+
 export interface ApiResponse {
   status: string;
   message: string;
-  data?: UserRegistrationData;
+  data?: LoginDataRes;
 }
 
 export interface ErrorType{

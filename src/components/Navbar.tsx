@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router-dom"; // Corrected import
+import { Link } from "react-router-dom";
+import { useUserStorage } from "../hooks/localStorage";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const {  isAuthenticated,deleteUser } = useUserStorage(); // Make sure your hook returns isAuthenticated
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -25,36 +27,53 @@ const Navbar = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-4 flex-grow justify-center">
-            {/* About Developers Link (Centered) */}
             <Link
               to="/developers"
               className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
             >
               About Developers
             </Link>
-             <Link
+            <Link
               to="/bot"
               className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
             >
-             Chat Bot
+              Chat Bot
             </Link>
-            
           </div>
 
-          {/* Register and Login Links (Right Side) */}
+          {/* Right Side Links - Conditionally rendered */}
           <div className="hidden md:flex items-center space-x-4">
-            <Link
-              to="/register"
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
-            >
-              Register
-            </Link>
-            <Link
-              to="/login"
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
-            >
-              Login
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <Link
+                  to="/account"
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  My Account
+                </Link>
+                <button
+                onClick={()=>deleteUser()}
+                  className="text-gray-700 cursor-pointer hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/register"
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Register
+                </Link>
+                <Link
+                  to="/login"
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Login
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -123,18 +142,37 @@ const Navbar = () => {
             Chat Bot
           </Link>
 
-          <Link
-            to="/register"
-            className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
-          >
-            Register
-          </Link>
-          <Link
-            to="/login"
-            className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
-          >
-            Login
-          </Link>
+          {isAuthenticated ? (
+            <>
+              <Link
+                to="/account"
+                className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
+              >
+                My Account
+              </Link>
+              <Link
+                to="/logout"
+                className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
+              >
+                Logout
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/register"
+                className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
+              >
+                Register
+              </Link>
+              <Link
+                to="/login"
+                className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
+              >
+                Login
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>
