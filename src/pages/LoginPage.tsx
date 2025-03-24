@@ -197,7 +197,6 @@ const LoginPage: React.FC = () => {
           email:formData.email
         }
       const response = await loginUser(data).unwrap();
-      console.log("Login successful:", response.data?.token);
       toast.success("Login successful!");
       navigate('/bot')
       if(response.data){
