@@ -1,5 +1,4 @@
-
-// Data for the sections
+import homePageImage from '../assets/home.jpeg';
 const sections = [
   {
     id: 1,
@@ -79,11 +78,55 @@ const helpSupport = [
     contact: "Telephone Number: 0800720601",
   },
 ];
-
 const Home = () => {
   return (
-    <div className="bg-gray-50 py-12">
-      {/* Sections */}
+    <div className="bg-gray-50 ">
+      {/* Hero Section with Background Image */}
+      <div className="relative h-[50vh] min-h-[400px] max-h-[800px]">
+  <img 
+    src={homePageImage} 
+    alt="SHA Background"
+    className="absolute inset-0 w-full h-full object-cover"
+  />
+  <div className="absolute inset-0  bg-opacity-50"></div>
+  <div className="relative z-10 h-full flex items-center justify-center text-center text-white px-4">
+    <div className="w-full max-w-6xl px-6 py-12">
+      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-tight">
+        Social Health Authority (SHA)
+      </h1>
+      <p className="text-lg sm:text-xl md:text-2xl mb-8 mx-auto max-w-2xl">
+        Ensuring a healthier, more equitable future for all through comprehensive coverage and quality care without financial worry
+      </p>
+      <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 sm:py-3 sm:px-8 rounded-lg text-base sm:text-lg transition duration-300">
+        Register
+      </button>
+    </div>
+  </div>
+</div>
+
+      {/* Overview Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="bg-white rounded-lg shadow-lg p-8 md:p-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Overview</h2>
+              <p className="text-xl text-gray-700 mb-6">
+                SHA facilitates healthcare services from enlisted providers by pooling contributions—ensuring equitable distribution of quality healthcare.
+              </p>
+              <p className="text-gray-600">
+                The Social Health Authority is established under section 25 of the Act and is utilized to pool all contributions made under the Act.
+              </p>
+            </div>
+            <div className="flex items-center">
+              <p className="text-gray-600">
+                SHA is designed to provide healthcare services from empaneled and contracted healthcare providers and healthcare facilities on referral from primary health facilities. The Social Health Authority ensures that every resident in Kenya can access a comprehensive range of quality health services they need without the burden of financial hardship.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Existing Sections */}
       {sections.map((section) => (
         <div
           key={section.id}
@@ -101,7 +144,7 @@ const Home = () => {
               <img
                 src={section.image}
                 alt={section.title}
-                className="rounded-lg shadow-lg"
+                className="rounded-lg"
               />
             </div>
             {/* Text */}
