@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import homePageImage from '../assets/home.jpeg';
 const sections = [
   {
@@ -97,9 +98,9 @@ const Home = () => {
       <p className="text-lg sm:text-xl md:text-2xl mb-8 mx-auto max-w-2xl">
         Ensuring a healthier, more equitable future for all through comprehensive coverage and quality care without financial worry
       </p>
-      <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 sm:py-3 sm:px-8 rounded-lg text-base sm:text-lg transition duration-300">
+      <Link to='/register' className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 sm:py-3 sm:px-8 rounded-lg text-base sm:text-lg transition duration-300">
         Register
-      </button>
+      </Link>
     </div>
   </div>
 </div>
