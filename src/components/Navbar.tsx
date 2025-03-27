@@ -8,12 +8,12 @@ const Navbar = () => {
 
   // Close mobile menu when clicking outside or on a link
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (isMenuOpen && !event.target.closest('.mobile-menu-container')) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isMenuOpen && !(event.target as Element).closest('.mobile-menu-container')) {
         setIsMenuOpen(false);
       }
     };
-
+  
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isMenuOpen]);
