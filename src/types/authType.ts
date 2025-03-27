@@ -34,3 +34,23 @@ export interface ErrorType{
 
   }
 }
+
+export interface UserResponse{
+  status:string
+  message:string
+  data:user
+}
+
+export interface UsersResponse{
+  status:string
+  message:string
+  data:user[]
+}
+
+interface user{
+  id:string;
+  email:string;
+  contact:string;
+  id_type:string;
+  fistname:string
+}
