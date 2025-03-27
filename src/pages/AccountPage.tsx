@@ -1,47 +1,35 @@
 import { useState } from 'react';
 import { useUserStorage } from '../hooks/localStorage';
+import { useGetUserByIdQuery } from '../slice/user';
 
 const AccountPage = () => {
-  const { user } = useUserStorage();
+  const { user: localUser } = useUserStorage();
+  const userId = localUser?.userId || ''; // Get user ID from localStorage
+  const { data: apiUser, isLoading, isError,error } = useGetUserByIdQuery(userId);
+  console.log(error)
+  console.log(apiUser)
   const [showIdNumber, setShowIdNumber] = useState(false);
-  const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [editMode, setEditMode] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@example.com',
-    contact: '+254712345678',
-    idType: 'National ID',
-    idNumber: '12345678',
-  });
 
-  // Mock payment history - in a real app this would come from an API
+  // Mock payment history (replace with real API data if available)
   const currentMonth = new Date().getMonth();
   const paidMonths = Array.from({ length: 12 }, (_, i) => ({
     month: new Date(0, i).toLocaleString('default', { month: 'short' }),
-    paid: i <= currentMonth && Math.random() > 0.3, // Randomly mark some months as paid
+    paid: i <= currentMonth && Math.random() > 0.3,
   }));
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setProfileImage(event.target?.result as string);
-      };
-      reader.readAsDataURL(file);
+  // Static profile image (first letter of firstname)
+  const profileInitial = apiUser?.data.fistname?.charAt(0) || 'U';
+
+  const handleDeleteAccount = () => {
+    if (window.confirm('Are you sure you want to delete your account? This cannot be undone.')) {
+      console.log('User wants to delete account with ID:', userId);
+      // Add actual delete API call here
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSave = () => {
-    // In a real app, you would save to an API here
-    setEditMode(false);
-  };
+  if (isLoading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  if (isError) return <div className="min-h-screen flex items-center justify-center">Error loading user data</div>;
+  if (!apiUser) return <div className="min-h-screen flex items-center justify-center">No user data found</div>;
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -52,74 +40,23 @@ const AccountPage = () => {
             <div className="flex flex-col md:flex-row items-center">
               <div className="relative mb-4 md:mb-0 md:mr-6">
                 <div className="h-32 w-32 rounded-full bg-white flex items-center justify-center overflow-hidden border-4 border-white">
-                  {profileImage ? (
-                    <img src={profileImage} alt="Profile" className="h-full w-full object-cover" />
-                  ) : (
-                    <span className="text-blue-600 text-4xl font-bold">
-                      {formData.firstName.charAt(0)}{formData.lastName.charAt(0)}
-                    </span>
-                  )}
+                  <span className="text-blue-600 text-4xl font-bold">
+                    {profileInitial}
+                  </span>
                 </div>
-                <label className="absolute bottom-0 right-0 bg-white text-blue-600 rounded-full p-2 cursor-pointer shadow-md">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleImageUpload}
-                  />
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
-                  </svg>
-                </label>
               </div>
               <div>
                 <h1 className="text-2xl font-bold">
-                  {editMode ? (
-                    <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
-                      <input
-                        type="text"
-                        name="firstName"
-                        value={formData.firstName}
-                        onChange={handleInputChange}
-                        className="bg-blue-500 text-white border-b border-blue-300 focus:outline-none"
-                      />
-                      <input
-                        type="text"
-                        name="lastName"
-                        value={formData.lastName}
-                        onChange={handleInputChange}
-                        className="bg-blue-500 text-white border-b border-blue-300 focus:outline-none"
-                      />
-                    </div>
-                  ) : (
-                    `${formData.firstName} ${formData.lastName}`
-                  )}
+                  {apiUser.data.fistname || 'User'} {/* Note: There's a typo in your interface (fistname vs firstname) */}
                 </h1>
-                <p className="text-blue-100">{user?.role} Account</p>
+                <p className="text-blue-100">{localUser?.role} Account</p>
                 <div className="mt-4 flex space-x-2">
-                  {editMode ? (
-                    <>
-                      <button
-                        onClick={handleSave}
-                        className="bg-white text-blue-600 px-4 py-2 rounded-md font-medium"
-                      >
-                        Save Changes
-                      </button>
-                      <button
-                        onClick={() => setEditMode(false)}
-                        className="bg-transparent border border-white text-white px-4 py-2 rounded-md font-medium"
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  ) : (
-                    <button
-                      onClick={() => setEditMode(true)}
-                      className="bg-white text-blue-600 px-4 py-2 rounded-md font-medium"
-                    >
-                      Edit Profile
-                    </button>
-                  )}
+                  <button
+                    onClick={handleDeleteAccount}
+                    className="bg-red-600 text-white px-4 py-2 rounded-md font-medium hover:bg-red-700"
+                  >
+                    Delete Account
+                  </button>
                 </div>
               </div>
             </div>
@@ -134,31 +71,11 @@ const AccountPage = () => {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-500">Email</label>
-                    {editMode ? (
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    ) : (
-                      <p className="mt-1 text-gray-900">{formData.email}</p>
-                    )}
+                    <p className="mt-1 text-gray-900">{apiUser.data.email}</p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-500">Contact Number</label>
-                    {editMode ? (
-                      <input
-                        type="tel"
-                        name="contact"
-                        value={formData.contact}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                      />
-                    ) : (
-                      <p className="mt-1 text-gray-900">{formData.contact}</p>
-                    )}
+                    <p className="mt-1 text-gray-900">{apiUser.data.contact}</p>
                   </div>
                 </div>
               </div>
@@ -169,37 +86,14 @@ const AccountPage = () => {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-500">ID Type</label>
-                    {editMode ? (
-                      <select
-                        name="idType"
-                        value={formData.idType}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                      >
-                        <option value="National ID">National ID</option>
-                        <option value="Passport">Passport</option>
-                        <option value="Driving License">Driving License</option>
-                      </select>
-                    ) : (
-                      <p className="mt-1 text-gray-900">{formData.idType}</p>
-                    )}
+                    <p className="mt-1 text-gray-900">{apiUser.data.id_type}</p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-500">ID Number</label>
                     <div className="mt-1 flex items-center">
-                      {editMode ? (
-                        <input
-                          type={showIdNumber ? "text" : "password"}
-                          name="idNumber"
-                          value={formData.idNumber}
-                          onChange={handleInputChange}
-                          className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      ) : (
-                        <p className="text-gray-900">
-                          {showIdNumber ? formData.idNumber : '••••••••'}
-                        </p>
-                      )}
+                      <p className="text-gray-900">
+                        {showIdNumber ? '••••••••' : '••••••••'} {/* Masked for security */}
+                      </p>
                       <button
                         onClick={() => setShowIdNumber(!showIdNumber)}
                         className="ml-2 text-blue-600 hover:text-blue-800"
@@ -239,30 +133,6 @@ const AccountPage = () => {
                       <p className="mt-2 text-sm">{month.month}</p>
                     </div>
                   ))}
-                </div>
-              </div>
-
-              {/* Account Upgrade */}
-              <div className="md:col-span-2 bg-blue-50 p-6 rounded-lg border border-blue-200">
-                <h2 className="text-lg font-semibold mb-2 text-blue-800">Account Upgrade</h2>
-                <p className="text-blue-600 mb-4">Upgrade to premium for additional features</p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                    <h3 className="font-medium text-gray-900">Basic</h3>
-                    <p className="text-gray-500 text-sm mt-1">Current plan</p>
-                  </div>
-                  <div className="bg-white p-4 rounded-lg shadow-sm border-2 border-blue-500 relative">
-                    <span className="absolute top-0 right-0 bg-blue-500 text-white text-xs px-2 py-1 rounded-bl-lg">Popular</span>
-                    <h3 className="font-medium text-gray-900">Premium</h3>
-                    <p className="text-gray-500 text-sm mt-1">KSh 1,500/month</p>
-                    <button className="mt-2 w-full bg-blue-600 text-white py-2 rounded-md text-sm font-medium hover:bg-blue-700">
-                      Upgrade
-                    </button>
-                  </div>
-                  <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                    <h3 className="font-medium text-gray-900">Enterprise</h3>
-                    <p className="text-gray-500 text-sm mt-1">Contact sales</p>
-                  </div>
                 </div>
               </div>
             </div>
