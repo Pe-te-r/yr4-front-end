@@ -52,5 +52,6 @@ interface user{
   email:string;
   contact:string;
   id_type:string;
-  fistname:string
+  id_number:string;
+  fistname:string;
 }
