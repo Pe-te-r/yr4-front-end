@@ -32,6 +32,12 @@ export interface ApiResponse {
   data?: LoginDataRes;
 }
 
+export interface ApiResponseChat {
+  status: string;
+  message: string;
+  data: string;
+}
+
 export interface ErrorType{
   status:string
   data:{
