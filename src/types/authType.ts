@@ -6,6 +6,12 @@ export interface LoginData {
 }
 
 
+export interface AiData{
+  user_id?:string
+  query:string
+}
+
+
 export interface UserRegistrationData {
   firstname: string;
   id_number: string;
